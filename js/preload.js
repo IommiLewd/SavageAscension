@@ -9,9 +9,11 @@ class Preload extends Phaser.State {
          this.load.image('player', 'img/player.png');
          this.load.image('pointer', 'img/laserpointer.png');
         this.load.image('barrier', 'img/barrier.png');
+        this.load.image('barrier2', 'img/barrier2.png');
         this.load.image('gradient', 'img/gradient.png');
         this.load.image('crossHair', 'img/crossHair.png');
         this.load.image('outOfBounds', 'img/outOfBounds.png');
+        this.load.image('bullet', 'img/bullet.png');
         
         
         
@@ -26,10 +28,10 @@ class Preload extends Phaser.State {
         
         
         //Controller files
-        this.load.image('compass', 'img/navigator.png');
-        this.load.image('touch_segment', 'img/indicator.png');
-        this.load.image('touch_segment2', 'img/indicator2.png');
-        this.load.image('touch', 'img/touch.png');
+//        this.load.image('compass', 'img/navigator.png');
+//        this.load.image('touch_segment', 'img/indicator.png');
+//        this.load.image('touch_segment2', 'img/indicator2.png');
+//        this.load.image('touch', 'img/touch.png');
 
 
 

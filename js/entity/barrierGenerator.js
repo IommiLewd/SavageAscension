@@ -16,13 +16,23 @@ class barrierGenerator extends Phaser.Sprite {
 
     _addBarriers() {
         for (var i = 0; i < this.numberOfBarriers; i++) {
-            this.barrier = this.game.add.tileSprite(400 + this.xModifier, 350 + this.yModifier, 300 , 32, 'barrier');
+            if(i % 2 === 0){
+            this.barrier = this.game.add.tileSprite(400 + this.xModifier, 350 + this.yModifier, 448 , 36, 'barrier2');
+            } else {
+            this.barrier = this.game.add.tileSprite(400 + this.xModifier, 350 + this.yModifier, 320 , 36, 'barrier');
+            }
             this.xModifier += 150;
             this.yModifier += 360;
             this.game.physics.arcade.enableBody(this.barrier);
             this.barrier.body.immovable = true;
             this.barrierGroup.add(this.barrier);
         }
+    }
+    
+    _barrierRandomize(barrier){
+        console.log('woof');
+        this.barrierWidth = Math.random() * (760 - 200) + 200;
+        barrier.x = this.barrierWidth;
     }
 
 
@@ -31,8 +41,9 @@ class barrierGenerator extends Phaser.Sprite {
 
 
         this.barrierGroup.forEach(function(barrier) {
-                barrier.body.velocity.y = -70;
+                barrier.body.velocity.y = -40;
                 if (barrier.y < -40) {
+                    this._barrierRandomize(barrier);
                     barrier.y = 930;
                 }
             }, this)

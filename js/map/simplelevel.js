@@ -16,8 +16,6 @@ class SimpleLevel extends Phaser.State {
         this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
     }
     _addController() {
-        //        this.game.touchControl = this.game.plugins.add(Phaser.Plugin.TouchControl);
-        //        this.game.touchControl.inputEnable();
         this._left = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
         this._right = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
         this._up = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
@@ -26,8 +24,50 @@ class SimpleLevel extends Phaser.State {
 
     _addPlayer() {
         this.player = new Player(this.game, 500, this.game.height / 2, 'testSheet');
-        // this.camera.follow(this.player, Phaser.Camera.FOLLOW_LOCKON); 
     }
+
+
+
+
+    _initBullets() {
+        this.bullets = this.game.add.group();
+        this.bullets.enableBody = true;
+        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.bullets.createMultiple(500, 'bullet');
+        this.bullets.setAll('checkWorldBounds', true);
+        this.bullets.setAll('outOfBoundsKill', true);
+        this.bullets.setAll('anchor.x', 0.5);
+        this.bullets.setAll('anchor.y', 0.5);
+        //  --- Disable Gravity for Each Bullet
+        this.bullets.forEach(function (L) {
+            L.body.allowGravity = false;
+        });
+        this._nextFire = 200;
+        this.fireRate = 120;
+
+    }
+
+
+
+
+
+
+    _fireMachinegun() {
+            this.bullet;
+        this.randomNumber = (Math.random() - 0.5) * 2;
+     console.log(this.randomNumber);
+        if (this.game.time.now > this._nextFire && this.bullets.countDead() > 4) {
+            this._nextFire = this.game.time.now + this.fireRate;
+             this.bullet = this.bullets.getFirstDead();
+            this.bullet.reset(this.player.x, this.player.y);
+            this.game.physics.arcade.velocityFromAngle(this.player._laser_pointer.angle + (this.randomNumber * 3) /* / this.randomNumber*/, 1900, this.bullet.body.velocity);
+            //console.log(this.player._laser_pointer.angle);
+            this.bullet.angle = this.player._laser_pointer.angle;
+            this.bullets.add(this.bullet);
+        }
+    }
+
+
 
 
     _loadCameraTarget() {
@@ -35,7 +75,6 @@ class SimpleLevel extends Phaser.State {
         this.cameraTarget.anchor.setTo(0.5);
         this.game.camera.follow(this.cameraTarget);
     }
-
 
     _barrierGenerator() {
         this.barrier = new barrierGenerator(this.game, 5);
@@ -62,18 +101,27 @@ class SimpleLevel extends Phaser.State {
         this._barrierGenerator();
         this._addController();
         this._addPlayer();
+        this._initBullets();
         // this._addEnemy();
 
     }
 
     update() {
+
+
+
+
+
+        if (this.game.input.activePointer.leftButton.isDown) {
+            this._fireMachinegun();
+        }
         //        this.enemies.forEachAlive(function (enemy) {
         //            enemy.playerX = this.player.x;
         //            enemy.playerY = this.player.y;
         //        }, this)
 
-        var midX = (this.player.x + 0 + this.game.input.worldX) / 2;
-        var midY = (this.player.y + 0 + this.game.input.worldY) / 2;
+        var midX = (this.player.x + 0 + this.game.input.worldX) / 2.2;
+        var midY = (this.player.y + 0 + this.game.input.worldY) / 2.2;
         this.cameraTarget.x = midX;
         this.cameraTarget.y = midY;
 
