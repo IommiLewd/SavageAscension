@@ -9,7 +9,9 @@ class Preload extends Phaser.State {
          this.load.image('player', 'img/player.png');
          this.load.image('pointer', 'img/laserpointer.png');
         this.load.image('barrier', 'img/barrier.png');
-        
+        this.load.image('gradient', 'img/gradient.png');
+        this.load.image('crossHair', 'img/crossHair.png');
+        this.load.image('outOfBounds', 'img/outOfBounds.png');
         
         
         
