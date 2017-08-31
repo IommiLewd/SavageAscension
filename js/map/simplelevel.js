@@ -215,9 +215,9 @@ class SimpleLevel extends Phaser.State {
     update() {
 
         if (this.game.input.activePointer.leftButton.isDown) {
-            this._fireMachinegun();
-            //this._fireBeamWeapon();
-            // this._fireChargedPulsar();
+            //this._fireMachinegun();
+            // this._fireBeamWeapon();
+            this._fireChargedPulsar();
         }
         //        this.enemies.forEachAlive(function (enemy) {
         //            enemy.playerX = this.player.x;
