@@ -6,32 +6,38 @@ class Preload extends Phaser.State {
         this.load.script('controller', 'js/entity/controller.js');
         this.load.script('player', 'js/entity/player.js');
         this.load.script('barrierGenerator', 'js/entity/barrierGenerator.js');
-         this.load.image('player', 'img/player.png');
-         this.load.image('pointer', 'img/laserpointer.png');
+        this.load.image('player', 'img/constructionDroneDisc.png');
+        this.load.image('wheel', 'img/constructionDroneWheel.png');
+        this.load.image('pointer', 'img/laserpointer.png');
+        this.load.image('outOfBounds', 'img/outOfBounds.png');
+
+
+        //Background
+        this.load.image('gradient', 'img/kritaBackground.png');
+        this.load.image('background1', 'img/kritaBackground2.png');
+        this.load.image('background2', 'img/kritaBackground3.png');
+
+
+        //Barriers
         this.load.image('barrier', 'img/barrier.png');
         this.load.image('barrier2', 'img/barrier2.png');
-        this.load.image('gradient', 'img/gradient.png');
+
+        //Gun related
         this.load.image('crossHair', 'img/crossHair.png');
-        this.load.image('outOfBounds', 'img/outOfBounds.png');
-        this.load.image('bullet', 'img/bullet.png');
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        this.load.image('gun', 'img/constructionDroneGun.png');
+        this.load.spritesheet('bullet', 'img/bullet.png', 38, 6, 3);
+        this.load.spritesheet('blueFlame', 'img/blueFlameSpritesheet.png', 10, 10, 3);
+
+
+
+
+
+
         //Controller files
-//        this.load.image('compass', 'img/navigator.png');
-//        this.load.image('touch_segment', 'img/indicator.png');
-//        this.load.image('touch_segment2', 'img/indicator2.png');
-//        this.load.image('touch', 'img/touch.png');
+        //        this.load.image('compass', 'img/navigator.png');
+        //        this.load.image('touch_segment', 'img/indicator.png');
+        //        this.load.image('touch_segment2', 'img/indicator2.png');
+        //        this.load.image('touch', 'img/touch.png');
 
 
 

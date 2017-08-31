@@ -17,9 +17,9 @@ class barrierGenerator extends Phaser.Sprite {
     _addBarriers() {
         for (var i = 0; i < this.numberOfBarriers; i++) {
             if(i % 2 === 0){
-            this.barrier = this.game.add.tileSprite(400 + this.xModifier, 350 + this.yModifier, 448 , 36, 'barrier2');
+            this.barrier = this.game.add.tileSprite(250 + this.xModifier, 350 + this.yModifier, 448 , 36, 'barrier2');
             } else {
-            this.barrier = this.game.add.tileSprite(400 + this.xModifier, 350 + this.yModifier, 320 , 36, 'barrier');
+            this.barrier = this.game.add.tileSprite(250 + this.xModifier, 350 + this.yModifier, 320 , 36, 'barrier');
             }
             this.xModifier += 150;
             this.yModifier += 360;
@@ -30,8 +30,7 @@ class barrierGenerator extends Phaser.Sprite {
     }
     
     _barrierRandomize(barrier){
-        console.log('woof');
-        this.barrierWidth = Math.random() * (760 - 200) + 200;
+        this.barrierWidth = Math.random() * (900 - 160) + 160;
         barrier.x = this.barrierWidth;
     }
 
