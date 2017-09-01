@@ -39,9 +39,6 @@ class Player extends Phaser.Sprite {
     update() {
         this._laser_pointer.rotation = this.game.physics.arcade.angleToPointer(this);
     this._gun.rotation = this.game.physics.arcade.angleToPointer(this);
-if(this.onBarrier){
-    console.log('arse');
-}
 
 
 

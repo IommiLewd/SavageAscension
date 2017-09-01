@@ -215,9 +215,9 @@ class SimpleLevel extends Phaser.State {
     update() {
 
         if (this.game.input.activePointer.leftButton.isDown) {
-            //this._fireMachinegun();
+            this._fireMachinegun();
             // this._fireBeamWeapon();
-            this._fireChargedPulsar();
+            //this._fireChargedPulsar();
         }
         //        this.enemies.forEachAlive(function (enemy) {
         //            enemy.playerX = this.player.x;
@@ -267,7 +267,6 @@ class SimpleLevel extends Phaser.State {
         if(this._up.isDown && this.player.doubleJump && this.game.time.now > this.jumpTimer){
              this.player.body.velocity.y = -500;
              this.player.doubleJump = false;
-            console.log('bark');
         }
         this.wheel.x = this.player.x;
         this.wheel.y = this.player.y;
