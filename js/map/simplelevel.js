@@ -7,12 +7,12 @@ class SimpleLevel extends Phaser.State {
         this.game.canvas.oncontextmenu = function (e) {
             e.preventDefault();
         }
-        this.game.world.setBounds(0, 0, 1600, 900);
+        this.game.world.setBounds(0, 0, 1536, 900);
         this.game.stage.backgroundColor = "#1b2823";
         this.gradient = this.game.add.tileSprite(0, 0, 1600, 900, 'gradient');
-        this.background1 = this.game.add.image(0, 0, 'background1');
-        this.background2 = this.game.add.image(0, 0, 'background2');
-        console.log('width is' + this.game.world.width)
+       //this.background1 = this.game.add.tileSprite(this.game.world.width/2, 0, 300, 900, 'background1');
+       // this.background1.anchor.setTo(0.5, 0.0);
+       // this.background2 = this.game.add.image(0, 0, 'background2');
         this._loadCameraTarget();
         this.UpperBound = this.game.add.tileSprite(0, 0, this.game.world.width, 32, 'outOfBounds');
         this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
@@ -28,7 +28,12 @@ class SimpleLevel extends Phaser.State {
     }
 
     _addPlayer() {
-        this.player = new Player(this.game, 500, this.game.height / 2, 'testSheet');
+        this.player = new Player(this.game, 200, 100, 'testSheet');
+    }
+    
+    
+    _addEnemyGroup(side){
+        this.enemy = new Enemy(this.game, 100, 100, 'enemy');
     }
 
     _initBullets() {
@@ -98,7 +103,9 @@ class SimpleLevel extends Phaser.State {
 
     }
 
-
+_initUserInterface(){
+    this.userInterface = new UserInterface(this);
+}
 
 
     _loadCameraTarget() {
@@ -114,17 +121,11 @@ class SimpleLevel extends Phaser.State {
 
 
     _kill_bullet(bullet, barrier) {
-        //        this.testScorch = this.game.add.sprite(bullet.x, bullet.y, 'redPixel');
-        //        this.testScorch.rotation = bullet.rotation;
         bullet.kill();
-        //        console.log('Bullet X is ' + bullet.x + 'Bullet Y is ' + bullet.y);
-
-
         this.explosion.x = bullet.x;
         this.explosion.y = bullet.y;
         this.explosion.on = true;
         this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this._endExplosion, this);
-
     }
 
 
@@ -140,6 +141,7 @@ class SimpleLevel extends Phaser.State {
 
 
         this.game.physics.arcade.collide(this.barrier.barrierGroup, this.player, this.processHandler, this.playerOnBarrier);
+        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.enemy, this.processHandler/*, this.playerOnBarrier*/);
         this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
     }
 
@@ -207,6 +209,8 @@ class SimpleLevel extends Phaser.State {
         this._addPlayer();
         this._initBullets();
         this._addExplosion();
+        this._initUserInterface();
+        this._addEnemyGroup();
         
         // this._addEnemy();
 
@@ -214,6 +218,11 @@ class SimpleLevel extends Phaser.State {
 
     update() {
 
+        
+        
+//        if(this.enemy.y < 10){
+//            this.enemy.kill();
+//        }
         if (this.game.input.activePointer.leftButton.isDown) {
             this._fireMachinegun();
             // this._fireBeamWeapon();
@@ -224,10 +233,10 @@ class SimpleLevel extends Phaser.State {
         //            enemy.playerY = this.player.y;
         //        }, this)
 
-        this.background1.x = this.player.x * 0.18;
-        this.background1.y = this.player.y * 0.12;
-        this.background2.x = this.player.x * 0.11;
-        this.background2.y = this.player.y * 0.11;
+  //  this.background1.x = this.player.x * 0.1;
+//        this.background1.y = this.player.y * 0.12;
+//        this.background2.x = this.player.x * 0.11;
+//        this.background2.y = this.player.y * 0.11;
 
 
 
@@ -260,7 +269,6 @@ class SimpleLevel extends Phaser.State {
             this.player.body.velocity.y = -500;
             this.player.onBarrier = false;
              this.player.doubleJump = true;
-            console.log(this.player.doubleJump);
             this.jumpTimer = this.game.time.now + 500;
         }
         

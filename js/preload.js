@@ -5,22 +5,27 @@ class Preload extends Phaser.State {
         this.load.script('simpleLevel', 'js/map/simplelevel.js');
         this.load.script('controller', 'js/entity/controller.js');
         this.load.script('player', 'js/entity/player.js');
+        this.load.script('enemy', 'js/entity/enemy.js');
+        this.load.script('userInterface', 'js/entity/userInterface.js');
         this.load.script('barrierGenerator', 'js/entity/barrierGenerator.js');
         this.load.image('player', 'img/constructionDroneDisc.png');
         this.load.image('wheel', 'img/constructionDroneWheel.png');
         this.load.image('pointer', 'img/laserpointer.png');
         this.load.image('outOfBounds', 'img/outOfBounds.png');
+        this.load.image('enemy', 'img/enemy.png');
 
 
         //Background
-        this.load.image('gradient', 'img/kritaBackground.png');
-        this.load.image('background1', 'img/kritaBackground2.png');
+       // this.load.image('gradient', 'img/kritaBackground.png');
+        this.load.image('gradient', 'img/finGradient.png');
+        this.load.image('background1', 'img/tileTower1.png');
         this.load.image('background2', 'img/kritaBackground3.png');
 
 
         //Barriers
         this.load.image('barrier', 'img/barrier.png');
         this.load.image('barrier2', 'img/barrier2.png');
+        this.load.image('floor', 'img/floorBarrier.png');
 
         //Gun related
         this.load.image('crossHair', 'img/crossHair.png');
