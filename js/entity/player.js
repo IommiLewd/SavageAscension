@@ -12,34 +12,48 @@ class Player extends Phaser.Sprite {
         this._addAnimations();
         this.onBarrier = false;
         this.doubleJump = false;
-  
+        this.body.setSize(38, 60, 0, 0);
+        this._initLegs();
+
 
     }
 
     _addAnimations() {
-        //        this.animations.add('down', [1, 2, 3,4], 10, true);
-        //        this.animations.add('right', [11, 12, 13, 14], 10, true);
-        //        //this.animations.add('up', [11, 12, 13, 14], 10, true);
-        //        this.animations.add('up', [6, 7, 8,9], 10, true);
-        //        this.animations.add('left', [16, 17, 18, 19], 10, true);
-    }
-    
 
+        //                //this.animations.add('up', [11, 12, 13, 14], 10, true);
+        //                this.animations.add('up', [6, 7, 8,9], 10, true);
+        //                this.animations.add('left', [16, 17, 18, 19], 10, true);
+    }
+
+    _initLegs() {
+        this._Legs = this.game.add.sprite(0, 30, 'legs');
+        this._Legs.anchor.setTo(0.5);
+        this.addChild(this._Legs);
+
+
+
+
+        this._Legs.animations.add('still', [0], 10, true);
+        this._Legs.animations.add('towardsFacing', [4, 5, 6, 7], 10, true);
+        this._Legs.animations.play('towardsFacing');
+
+    }
 
 
     _initLaser() {
-        this._laser_pointer = this.game.add.tileSprite(0, 0, 768, 0.5, 'pointer');
+        this._laser_pointer = this.game.add.tileSprite(0, 6, 768, 0.5, 'pointer');
         this.addChild(this._laser_pointer);
-        this._gun = this.game.add.image(0, 0, 'gun');
-        this._gun.anchor.setTo(0.5);
+        this._gun = this.game.add.image(-5, 8, 'gun');
+        this._gun.anchor.setTo(0.0, 0.5);
         this.addChild(this._gun);
+
     }
 
 
 
     update() {
         this._laser_pointer.rotation = this.game.physics.arcade.angleToPointer(this);
-    this._gun.rotation = this.game.physics.arcade.angleToPointer(this);
+        this._gun.rotation = this.game.physics.arcade.angleToPointer(this);
 
 
 

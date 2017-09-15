@@ -205,7 +205,7 @@ _initUserInterface(){
         this._loadLevel();
         this._barrierGenerator();
         this._addController();
-        this._initWheel();
+        //this._initWheel();
         this._addPlayer();
         this._initBullets();
         this._addExplosion();
@@ -249,10 +249,8 @@ _initUserInterface(){
 
         if (this._left.isDown) {
             this.player.body.velocity.x = -220;
-             this.wheel.rotation += -5;
         } else if (this._right.isDown) {
             this.player.body.velocity.x = 220;
-            this.wheel.rotation += 5;
         } else {
             this.player.body.velocity.x = 0;
             
@@ -276,8 +274,10 @@ _initUserInterface(){
              this.player.body.velocity.y = -500;
              this.player.doubleJump = false;
         }
-        this.wheel.x = this.player.x;
-        this.wheel.y = this.player.y;
 
+    }
+    
+    render (){
+      //  this.game.debug.body(this.player);
     }
 }

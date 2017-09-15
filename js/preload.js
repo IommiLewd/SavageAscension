@@ -29,12 +29,13 @@ class Preload extends Phaser.State {
 
         //Gun related
         this.load.image('crossHair', 'img/crossHair.png');
-        this.load.image('gun', 'img/constructionDroneGun.png');
+        this.load.image('gun', 'img/gun.png');
         this.load.spritesheet('bullet', 'img/bullet.png', 38, 6, 3);
         this.load.spritesheet('blueFlame', 'img/blueFlameSpritesheet.png', 10, 10, 3);
 
-
-
+        //Player Related
+        this.load.spritesheet('legs', 'img/Legs.png', 26, 24, 11);
+        this.load.spritesheet('player', 'img/torsos.png', 38, 38, 3);
 
 
 
