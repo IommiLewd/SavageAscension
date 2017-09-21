@@ -10,9 +10,9 @@ class SimpleLevel extends Phaser.State {
         this.game.world.setBounds(0, 0, 1536, 900);
         this.game.stage.backgroundColor = "#1b2823";
         this.gradient = this.game.add.tileSprite(0, 0, 1600, 900, 'gradient');
-       //this.background1 = this.game.add.tileSprite(this.game.world.width/2, 0, 300, 900, 'background1');
-       // this.background1.anchor.setTo(0.5, 0.0);
-       // this.background2 = this.game.add.image(0, 0, 'background2');
+        //this.background1 = this.game.add.tileSprite(this.game.world.width/2, 0, 300, 900, 'background1');
+        // this.background1.anchor.setTo(0.5, 0.0);
+        // this.background2 = this.game.add.image(0, 0, 'background2');
         this._loadCameraTarget();
         this.UpperBound = this.game.add.tileSprite(0, 0, this.game.world.width, 32, 'outOfBounds');
         this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
@@ -28,11 +28,11 @@ class SimpleLevel extends Phaser.State {
     }
 
     _addPlayer() {
-        this.player = new Player(this.game, 200, 100, 'testSheet');
+        this.player = new Player(this.game, 200, 100, 'player');
     }
-    
-    
-    _addEnemyGroup(side){
+
+
+    _addEnemyGroup(side) {
         this.enemy = new Enemy(this.game, 100, 100, 'enemy');
     }
 
@@ -43,7 +43,7 @@ class SimpleLevel extends Phaser.State {
         this.bullets.createMultiple(500, 'bullet');
         this.bullets.setAll('checkWorldBounds', true);
         this.bullets.setAll('outOfBoundsKill', true);
-        this.bullets.setAll('anchor.x', 0.5);
+        this.bullets.setAll('anchor.x', 0.0);
         this.bullets.setAll('anchor.y', 0.5);
 
         //  --- Disable Gravity for Each Bullet
@@ -59,6 +59,7 @@ class SimpleLevel extends Phaser.State {
     }
 
     _fireMachinegun() {
+        /*this.player._fireWeapon();*/
         this.fireRate = 90;
         this.bullet;
         this.bullets.setAll('frame', 0);
@@ -103,9 +104,9 @@ class SimpleLevel extends Phaser.State {
 
     }
 
-_initUserInterface(){
-    this.userInterface = new UserInterface(this);
-}
+    _initUserInterface() {
+        this.userInterface = new UserInterface(this);
+    }
 
 
     _loadCameraTarget() {
@@ -141,7 +142,7 @@ _initUserInterface(){
 
 
         this.game.physics.arcade.collide(this.barrier.barrierGroup, this.player, this.processHandler, this.playerOnBarrier);
-        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.enemy, this.processHandler/*, this.playerOnBarrier*/);
+        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.enemy, this.processHandler /*, this.playerOnBarrier*/ );
         this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
     }
 
@@ -153,12 +154,6 @@ _initUserInterface(){
         return true;
     }
 
-        _initWheel(){
-        this.wheel = this.game.add.sprite(0, 0, 'wheel');
-        this.wheel.anchor.setTo(0.5);
-
-            this.wheel.sendToBack;
-    }
 
 
     _addExplosion() {
@@ -205,39 +200,48 @@ _initUserInterface(){
         this._loadLevel();
         this._barrierGenerator();
         this._addController();
-        //this._initWheel();
         this._addPlayer();
         this._initBullets();
         this._addExplosion();
         this._initUserInterface();
         this._addEnemyGroup();
-        
+
         // this._addEnemy();
 
     }
 
     update() {
 
-        
-        
-//        if(this.enemy.y < 10){
-//            this.enemy.kill();
-//        }
+
+
+        //        if(this.enemy.y < 10){
+        //            this.enemy.kill();
+        //        }
         if (this.game.input.activePointer.leftButton.isDown) {
             this._fireMachinegun();
             // this._fireBeamWeapon();
             //this._fireChargedPulsar();
-        }
+        } else {/*this.player._notfiring();*/}
         //        this.enemies.forEachAlive(function (enemy) {
         //            enemy.playerX = this.player.x;
         //            enemy.playerY = this.player.y;
         //        }, this)
 
-  //  this.background1.x = this.player.x * 0.1;
-//        this.background1.y = this.player.y * 0.12;
-//        this.background2.x = this.player.x * 0.11;
-//        this.background2.y = this.player.y * 0.11;
+        //  this.background1.x = this.player.x * 0.1;
+        //        this.background1.y = this.player.y * 0.12;
+        //        this.background2.x = this.player.x * 0.11;
+        //        this.background2.y = this.player.y * 0.11;
 
+        if (this.game.input.worldX < this.player.world.x) {
+            console.log('facing left');
+            this.player.facingLeft = true;
+            this.player._torso.scale.setTo(-1.0, 1.0);
+            this.player._gun.scale.setTo(1.0, -1.0);
+        } else {
+            this.player.facingLeft = false;
+            this.player._torso.scale.setTo(1.0, 1.0);
+            this.player._gun.scale.setTo(1.0, 1.0);
+        }
 
 
         var midX = (this.player.x + 0 + this.game.input.worldX) / 2.2;
@@ -247,37 +251,49 @@ _initUserInterface(){
 
         this._checkCollision();
 
-        if (this._left.isDown) {
-            this.player.body.velocity.x = -220;
-        } else if (this._right.isDown) {
-            this.player.body.velocity.x = 220;
-        } else {
-            this.player.body.velocity.x = 0;
-            
-        }
-
-        if (this._up.isDown && this.player.body.blocked.down) {
-            this.player.body.velocity.y = -500;
-            this.player.onBarrier = false;
-            this.player.doubleJump = true;
-            this.jumpTimer = this.game.time.now + 500;
-        }
-
-        if (this._up.isDown && this.player.onBarrier) {
-            this.player.body.velocity.y = -500;
-            this.player.onBarrier = false;
-             this.player.doubleJump = true;
-            this.jumpTimer = this.game.time.now + 500;
-        }
-        
-        if(this._up.isDown && this.player.doubleJump && this.game.time.now > this.jumpTimer){
-             this.player.body.velocity.y = -500;
-             this.player.doubleJump = false;
-        }
+//        if (this._left.isDown) {
+//            this.player.body.velocity.x = -220;
+//            
+////            this.player._Legs.animations.play('awayFacing');
+//            this.player.movement = true;
+//            
+//        } else if (this._right.isDown) {
+//
+////            this.player._Legs.animations.play('towardsFacing');
+//            
+//            this.player.body.velocity.x = 220;
+//            this.player.movement = true;
+//        } else {
+//            this.player.movement = false;
+//            this.player.body.velocity.x = 0;
+//            
+////            this.player._Legs.animations.play('towardsStill');
+//            
+//
+//        }
+//
+//        if (this._up.isDown && this.player.body.blocked.down) {
+//            this.player.body.velocity.y = -500;
+//            this.player.onBarrier = false;
+//            this.player.doubleJump = true;
+//            this.jumpTimer = this.game.time.now + 500;
+//        }
+//
+//        if (this._up.isDown && this.player.onBarrier) {
+//            this.player.body.velocity.y = -500;
+//            this.player.onBarrier = false;
+//            this.player.doubleJump = true;
+//            this.jumpTimer = this.game.time.now + 500;
+//        }
+//
+//        if (this._up.isDown && this.player.doubleJump && this.game.time.now > this.jumpTimer) {
+////            this.player.body.velocity.y = -500;
+////            this.player.doubleJump = false;
+//        }
 
     }
-    
-    render (){
-      //  this.game.debug.body(this.player);
+
+    render() {
+        //  this.game.debug.body(this.player);
     }
 }

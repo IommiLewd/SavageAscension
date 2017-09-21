@@ -8,7 +8,7 @@ class Preload extends Phaser.State {
         this.load.script('enemy', 'js/entity/enemy.js');
         this.load.script('userInterface', 'js/entity/userInterface.js');
         this.load.script('barrierGenerator', 'js/entity/barrierGenerator.js');
-        this.load.image('player', 'img/constructionDroneDisc.png');
+        //this.load.image('player', 'img/constructionDroneDisc.png');
         this.load.image('wheel', 'img/constructionDroneWheel.png');
         this.load.image('pointer', 'img/laserpointer.png');
         this.load.image('outOfBounds', 'img/outOfBounds.png');
@@ -29,13 +29,17 @@ class Preload extends Phaser.State {
 
         //Gun related
         this.load.image('crossHair', 'img/crossHair.png');
-        this.load.image('gun', 'img/gun.png');
+       // this.load.image('gun', 'img/gun.png');
+        this.load.spritesheet('gun', 'img/gun.png', 42,12,3);
         this.load.spritesheet('bullet', 'img/bullet.png', 38, 6, 3);
         this.load.spritesheet('blueFlame', 'img/blueFlameSpritesheet.png', 10, 10, 3);
 
         //Player Related
-        this.load.spritesheet('legs', 'img/Legs.png', 26, 24, 11);
-        this.load.spritesheet('player', 'img/torsos.png', 38, 38, 3);
+        this.load.spritesheet('legs', 'img/Legs.png', 66, 36, 14);
+        //this.load.spritesheet('torso', 'img/torso.png', 66, 32, 10);
+        //this.load.spritesheet('player', 'img/torso.png', 32, 32, 3);
+        this.load.spritesheet('torso', 'img/torso.png', 32, 32, 3);
+     this.load.image('player', 'img/emptySprite.png');
 
 
 
