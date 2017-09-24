@@ -17,15 +17,7 @@ class SimpleLevel extends Phaser.State {
         this.UpperBound = this.game.add.tileSprite(0, 0, this.game.world.width, 32, 'outOfBounds');
         this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
     }
-    _addController() {
-        this._left = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-        this._right = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
-        this._up = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
-        this._down = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-        this.game.input.mouse.mouseWheelCallback = this._mouseWheel;
-        this._WheelUp = this.game.input.mouse.WHEEL_UP;
 
-    }
 
     _addPlayer() {
         this.player = new Player(this.game, 200, 100, 'player');
@@ -67,9 +59,9 @@ class SimpleLevel extends Phaser.State {
         if (this.game.time.now > this._nextFire && this.bullets.countDead() > 4) {
             this._nextFire = this.game.time.now + this.fireRate;
             this.bullet = this.bullets.getFirstDead();
-            this.bullet.reset(this.player.x, this.player.y);
-            this.game.physics.arcade.velocityFromAngle(this.player._laser_pointer.angle + (this.randomNumber * 5), 1600, this.bullet.body.velocity);
-            this.bullet.angle = this.player._laser_pointer.angle;
+            this.bullet.reset(this.player.x, this.player.y - 10);
+            this.game.physics.arcade.velocityFromAngle(this.player._gun.angle + (this.randomNumber * 5), 1600, this.bullet.body.velocity);
+            this.bullet.angle = this.player._gun.angle;
             this.bullets.add(this.bullet);
         }
     }
@@ -82,7 +74,7 @@ class SimpleLevel extends Phaser.State {
             this._nextFire = this.game.time.now + this.fireRate;
             this.bullet = this.bullets.getFirstDead();
             this.bullet.reset(this.player.x, this.player.y);
-            this.game.physics.arcade.velocityFromAngle(this.player._laser_pointer.angle, 1600, this.bullet.body.velocity);
+            this.game.physics.arcade.velocityFromAngle(this.player._gun.angle, 1600, this.bullet.body.velocity);
             this.bullet.angle = this.player._laser_pointer.angle;
             this.bullets.add(this.bullet);
         }
@@ -139,15 +131,17 @@ class SimpleLevel extends Phaser.State {
         this.physics.arcade.overlap(this.bullets, this.barrier.barrierGroup, this._kill_bullet, function (bullet, barrierGroup) {
             return barrierGroup.collides;
         }, this);
-
-
         this.game.physics.arcade.collide(this.barrier.barrierGroup, this.player, this.processHandler, this.playerOnBarrier);
         this.game.physics.arcade.collide(this.barrier.barrierGroup, this.enemy, this.processHandler /*, this.playerOnBarrier*/ );
         this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
     }
 
-    playerOnBarrier(player) {
-        player.onBarrier = true;
+    playerOnBarrier(player, barrier) {
+        
+       
+    if(player.y < barrier.y + 5){
+           player.onBarrier = true;
+    } else {player.onBarrier = false;}
     }
 
     processhandler(player, barrier) {
@@ -199,12 +193,12 @@ class SimpleLevel extends Phaser.State {
         this.enemies = this.game.add.group();
         this._loadLevel();
         this._barrierGenerator();
-        this._addController();
+        //  this._addController();
         this._addPlayer();
         this._initBullets();
         this._addExplosion();
-        this._initUserInterface();
-        this._addEnemyGroup();
+        //        this._initUserInterface();
+        //        this._addEnemyGroup();
 
         // this._addEnemy();
 
@@ -212,88 +206,117 @@ class SimpleLevel extends Phaser.State {
 
     update() {
 
-
-
-        //        if(this.enemy.y < 10){
-        //            this.enemy.kill();
-        //        }
+        //        //        if(this.enemy.y < 10){
+        //        //            this.enemy.kill();
+        //        //        }
         if (this.game.input.activePointer.leftButton.isDown) {
             this._fireMachinegun();
+            this.player._gun.animations.play('fire');
             // this._fireBeamWeapon();
             //this._fireChargedPulsar();
-        } else {/*this.player._notfiring();*/}
-        //        this.enemies.forEachAlive(function (enemy) {
-        //            enemy.playerX = this.player.x;
-        //            enemy.playerY = this.player.y;
-        //        }, this)
-
-        //  this.background1.x = this.player.x * 0.1;
-        //        this.background1.y = this.player.y * 0.12;
-        //        this.background2.x = this.player.x * 0.11;
-        //        this.background2.y = this.player.y * 0.11;
-
-        if (this.game.input.worldX < this.player.world.x) {
-            console.log('facing left');
-            this.player.facingLeft = true;
-            this.player._torso.scale.setTo(-1.0, 1.0);
-            this.player._gun.scale.setTo(1.0, -1.0);
-        } else {
-            this.player.facingLeft = false;
-            this.player._torso.scale.setTo(1.0, 1.0);
-            this.player._gun.scale.setTo(1.0, 1.0);
-        }
-
-
+        } else { this.player._gun.animations.play('notFiring'); }
+        //        //        this.enemies.forEachAlive(function (enemy) {
+        //        //            enemy.playerX = this.player.x;
+        //        //            enemy.playerY = this.player.y;
+        //        //        }, this)
+        //
+        //        //  this.background1.x = this.player.x * 0.1;
+        //        //        this.background1.y = this.player.y * 0.12;
+        //        //        this.background2.x = this.player.x * 0.11;
+        //        //        this.background2.y = this.player.y * 0.11;
+        //
+        //        if (this.game.input.worldX < this.player.world.x) {
+        //          
+        //            console.log('facing left');
+        //            this.player.facingLeft = true;
+        //            this.player.craft.scale.setTo(-1.0, -1.0);
+        //              this.player.craft.rotation =+ this.player._laser_pointer.rotation;
+        ////            if (this.player._laser_pointer.rotation > this.player.craft.rotation) {
+        ////                this.player.craft.rotation -= 0.01;
+        ////            } else if (this.player._laser_pointer.rotation > this.player.craft.rotation) {
+        ////                this.player.craft.rotation += 0.01;
+        ////            }
+        //
+        //
+        //            //this.player._laser_pointer.scale.setTo(1.0, 1.0);
+        //
+        //        } else {
+        //
+        //
+        //this.player.craft.rotation =+ this.player._laser_pointer.rotation;
+        ////            if (this.player._laser_pointer.rotation < this.player.craft.rotation) {
+        ////                this.player.craft.rotation -= 0.1;
+        ////            } else if (this.player._laser_pointer.rotation > this.player.craft.rotation) {
+        ////                this.player.craft.rotation += 0.1;
+        ////            }
+        //
+        //            this.player.facingLeft = false;
+        //            //this.player.scale.setTo(-1.0, 1.0);
+        //            this.player.craft.scale.setTo(-1.0, 1.0);
+        //
+        //        }
+        //
+        //
         var midX = (this.player.x + 0 + this.game.input.worldX) / 2.2;
         var midY = (this.player.y + 0 + this.game.input.worldY) / 2.2;
         this.cameraTarget.x = midX;
         this.cameraTarget.y = midY;
-
+        //
         this._checkCollision();
-
-//        if (this._left.isDown) {
-//            this.player.body.velocity.x = -220;
-//            
-////            this.player._Legs.animations.play('awayFacing');
-//            this.player.movement = true;
-//            
-//        } else if (this._right.isDown) {
-//
-////            this.player._Legs.animations.play('towardsFacing');
-//            
-//            this.player.body.velocity.x = 220;
-//            this.player.movement = true;
-//        } else {
-//            this.player.movement = false;
-//            this.player.body.velocity.x = 0;
-//            
-////            this.player._Legs.animations.play('towardsStill');
-//            
-//
-//        }
-//
-//        if (this._up.isDown && this.player.body.blocked.down) {
-//            this.player.body.velocity.y = -500;
-//            this.player.onBarrier = false;
-//            this.player.doubleJump = true;
-//            this.jumpTimer = this.game.time.now + 500;
-//        }
-//
-//        if (this._up.isDown && this.player.onBarrier) {
-//            this.player.body.velocity.y = -500;
-//            this.player.onBarrier = false;
-//            this.player.doubleJump = true;
-//            this.jumpTimer = this.game.time.now + 500;
-//        }
-//
-//        if (this._up.isDown && this.player.doubleJump && this.game.time.now > this.jumpTimer) {
-////            this.player.body.velocity.y = -500;
-////            this.player.doubleJump = false;
-//        }
+        //
+        ////                if (this._left.isDown) {
+        ////                    this.player.body.velocity.x = -280;
+        ////                } else if (this._right.isDown) {
+        ////                    this.player.body.velocity.x = 280;
+        ////                } else {
+        ////                    this.player.body.velocity.x = 0;
+        ////                }
+        ////                if (this._up.isDown) {
+        ////                    this.player.body.velocity.y = -120;
+        ////                }
+        ////                if (this._down.isDown) {
+        ////                    this.player.body.velocity.y = 120;
+        ////                }
+        //
+        //
+        //        if (this._left.isDown) {
+        //            if(this.player.body.acceleration < 100){
+        //            this.player.body.acceleration.x = -280;
+        //        }} else if (this._right.isDown) {
+        //            this.player.body.acceleration.x = 280;
+        //        } else {
+        //            this.player.body.acceleration.x = 0;
+        //        }
+        //        if (this._up.isDown) {
+        //            this.player.body.acceleration.y = -220;
+        //        }
+        //        if (this._down.isDown) {
+        //            this.player.body.acceleration.y = 220;
+        //        }
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //
+        //        //
+        //        //        if (this._up.isDown && this.player.onBarrier) {
+        //        //            this.player.body.velocity.y = -500;
+        //        //            this.player.onBarrier = false;
+        //        //            this.player.doubleJump = true;
+        //        //            this.jumpTimer = this.game.time.now + 500;
+        //        //        }
+        //        //
+        //        //        if (this._up.isDown && this.player.doubleJump && this.game.time.now > this.jumpTimer) {
+        //        ////            this.player.body.velocity.y = -500;
+        //        ////            this.player.doubleJump = false;
+        //        //        }
 
     }
 
     render() {
-        //  this.game.debug.body(this.player);
+        //          this.game.debug.body(this.player);
     }
 }

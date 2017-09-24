@@ -1,121 +1,113 @@
 class Player extends Phaser.Sprite {
     constructor(game, x, y, key) {
-        super(game, x, y, 'player');
+        super(game, x, y, 'whiteSpace');
         this.game.add.existing(this);
         this.game.physics.arcade.enable(this);
         this.anchor.setTo(0.5, 0.5);
         this.game.physics.arcade.enableBody(this);
         this.body.collideWorldBounds = true;
-        this.body.gravity.y = 900;
-        this.body.bounce.setTo(0.2);
-        this._initTorso();
-        this._addAnimations();
-        this.facingLeft = false;
-        this.onBarrier = false;
-        this.doubleJump = false;
-        this.movement = false;
-        this.body.setSize(38, 67, 0, 0);
-        this._initLegs();
+        this.body.gravity.y = 300;
+
+        this.torso = this.game.add.sprite(-2, -14, 'torsos');
+        this.torso.anchor.setTo(0.5);
+        this.addChild(this.torso);
+        this.legs = this.game.add.sprite(-2, 20, 'legs');
+        this.legs.anchor.setTo(0.5);
+        this.addChild(this.legs);
+        this._addController();
         this._initLaser();
+        this._addAnimations();
+        this.onBarrier = false;
+    }
+
+
+
+    _addController() {
+        this._left = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+        this._right = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+        this._up = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+        this._down = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+        //        this.game.input.mouse.mouseWheelCallback = this._mouseWheel;
+        //        this._WheelUp = this.game.input.mouse.WHEEL_UP;
 
     }
 
     _addAnimations() {
-        this._torso.animations.add('levelFacing', [0], 10, true);
-        this._torso.animations.add('downwardFacing', [2], 10, true);
-        this._torso.animations.add('upwardFacing', [1], 10, true);
-        this._torso.animations.play('levelFacing');
+        this.torso.animations.add('normal', [0], 10, true);
+        this.torso.animations.add('upward', [1], 10, true);
+        this.torso.animations.add('downward', [2], 10, true);
 
-    }
-
-    _initLegs() {
-        this._Legs = this.game.add.sprite(-2, 16, 'legs');
-        this._Legs.anchor.setTo(0.5);
-        this.addChild(this._Legs);
-        this._Legs.animations.add('towardsStill', [0], 10, true);
-        this._Legs.animations.add('awayStill', [6], 10, true);
-        this._Legs.animations.add('towardsFacing', [1, 2, 3, 4], 8, true);
-        this._Legs.animations.add('awayFacing', [6, 7, 8, 9], 8, true);
-        this._Legs.animations.add('jumpLeft', [12], 8, true);
-        this._Legs.animations.add('jumpRight', [13], 8, true);
-        // this._Legs.animations.play('towardsFacing');
-        this._Legs.animations.play('towardsStill');
+        this.legs.animations.add('stand', [0], 10, true);
+        this.legs.animations.add('walk', [1, 2, 3], 6, true);
+        this.legs.animations.add('backwards', [4, 5, 6], 6, true);
+        this.legs.animations.add('fly', [3], 6, true);
     }
 
 
-    _initTorso() {
-        this._torso = this.game.add.sprite(0, 0, 'torso');
-        this._torso.anchor.setTo(0.5, 1.0);
-        this.addChild(this._torso);
-    }
-    
-    
-    _fireWeapon(){
-       this._gun.animations.play('firing');
-    }
-    
-    _notfiring(){
-        this._gun.animations.play('notFiring');
-    }
 
     _initLaser() {
-        this._laser_pointer = this.game.add.tileSprite(0, 0, 768, 0.5, 'pointer');
-        this.addChild(this._laser_pointer);
-        this._gun = this.game.add.image(0, 0, 'gun');
-        this._gun.anchor.setTo(0.0, 0.5);
+        this._gun = this.game.add.sprite(-4, -8, 'gun');
+        this._gun.anchor.setTo(0.1, 0.5);
         this.addChild(this._gun);
-     this._gun.animations.add('firing', [0, 1, 2], 40, true);
-       this._gun.animations.add('notFiring', [0], 10, true);
-
+        this._gun.animations.add('fire', [0, 1, 2], 30, true);
+        this._gun.animations.add('notFiring', [0], 30, false);
+        this._laser_pointer = this.game.add.tileSprite(0, 0, 768, 0.5, 'pointer');
+        this._gun.addChild(this._laser_pointer);
     }
 
 
     update() {
-        this._laser_pointer.rotation = this.game.physics.arcade.angleToPointer(this);
         this._gun.rotation = this.game.physics.arcade.angleToPointer(this);
 
-        console.log(this._gun.angle);
-        //        
-        if (this._gun.rotation < -0.5) {
-            this._torso.animations.play('upwardFacing');
-
-        } else if (this._gun.rotation > -0.5 && this._gun.rotation < 0.5 /*|| this._gun.angle > -150 && this._gun.rotation > 2.5 */ ) {
-            this._torso.animations.play('levelFacing');
-
-        } else if (this._gun.rotation > 0.5) {
-            this._torso.animations.play('downwardFacing');
-
-        }
-
-        if (this.body.velocity.y > -70) {
 
 
-            if (this.body.velocity.x < 0 && this.onBarrier) {
-                this._Legs.animations.play('awayFacing');
-            } else if (this.body.velocity.x > 0 && this.onBarrier) {
-                this._Legs.animations.play('towardsFacing');
+        if (this.game.input.worldX < this.x) {
+            this.torso.scale.setTo(-1.0, 1.0);
+            this._gun.scale.setTo(1.0, -1.0);
+            if (this._gun.angle < -160) {
+                this.torso.animations.play('normal');
+            } else if (this._gun.angle > -15) {
+                this.torso.animations.play('upward');
             } else {
-                if(this.facingLeft === false){
-                this._Legs.animations.play('towardsStill');
-                } else {
-                    this._Legs.animations.play('awayStill');
-                }
+                this.torso.animations.play('downward');
             }
-
-
-
-
-
-
-
-
         } else {
-if(this.facingLeft === false){
-            this._Legs.animations.play('jumpLeft');
-} else {
-        this._Legs.animations.play('jumpRight');
-}
+            this.legs.scale.setTo(1.0, 1.0);
+            this.torso.scale.setTo(1.0, 1.0);
+            this._gun.scale.setTo(1.0, 1.0);
+            if (this._gun.angle > -20 && this._gun.angle < 20) {
+                this.torso.animations.play('normal');
+            } else if (this._gun.angle > -20) {
+                this.torso.animations.play('upward');
+            } else {
+                this.torso.animations.play('downward');
+            }
         }
+
+
+
+        if (this._left.isDown) {
+            this.body.velocity.x = -140;
+        } else if (this._right.isDown) {
+            this.body.velocity.x = 140;
+        } else {
+            this.body.velocity.x = 0;
+        }
+        if (this._up.isDown && this.body.blocked.down || this._up.isDown && this.onBarrier) {
+            this.body.velocity.y = -220;
+            this.onBarrier = false;
+        }
+        
+        if(this.body.blocked.down || this.onBarrier){
+        if(this.body.velocity.x > 0){
+            this.legs.animations.play('walk');
+        } else if(this.body.velocity.x < 0) {
+             this.legs.animations.play('backwards');
+        } else {
+              this.legs.animations.play('stand');
+        }
+        } else { this.legs.animations.play('fly');
+               this.onBarrier = false;}
 
 
     }
