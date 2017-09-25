@@ -16,6 +16,7 @@ class SimpleLevel extends Phaser.State {
         this._loadCameraTarget();
         this.UpperBound = this.game.add.tileSprite(0, 0, this.game.world.width, 32, 'outOfBounds');
         this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
+        
     }
 
 
@@ -24,9 +25,15 @@ class SimpleLevel extends Phaser.State {
     }
 
 
-    _addEnemy() {
+    _addEnemy(amount) {
+        if(amount === undefined){
+            amount = 2;
+            
+        }
+        for(var i = 0; i < amount; i++){
         this.enemy = new Enemy(this.game, 100, 100, 'enemy');
         this.enemies.add(this.enemy);
+        }
     }
 
     _initBullets() {
@@ -114,12 +121,12 @@ class SimpleLevel extends Phaser.State {
 
     _checkCollision() {
 
-        this.physics.arcade.overlap(this.bullets, this.barrier.barrierGroup, this._kill_bullet, function (bullet, barrierGroup) {
-            return barrierGroup.collides;
-        }, this);
-        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.player, this.processHandler, this.playerOnBarrier);
-        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.enemy, this.processHandler, this.playerOnBarrier);
-        this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
+//        this.physics.arcade.overlap(this.bullets, this.barrier.barrierGroup, this._kill_bullet, function (bullet, barrierGroup) {
+//            return barrierGroup.collides;
+//        }, this);
+//        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.player, this.processHandler, this.playerOnBarrier);
+//        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.enemy, this.processHandler, this.playerOnBarrier);
+//        this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
     }
 
     playerOnBarrier(player, barrier) {
@@ -180,7 +187,7 @@ class SimpleLevel extends Phaser.State {
         this.selectedGun = 0;
 
         this._loadLevel();
-        this._barrierGenerator();
+       // this._barrierGenerator();
         //  this._addController();
         this._addPlayer();
         this._initBullets();
@@ -188,8 +195,8 @@ class SimpleLevel extends Phaser.State {
         //        this._initUserInterface();
         //        this._addEnemyGroup();
         this.enemies = this.game.add.group();
-        this._addEnemy();
-
+        this._addEnemy(1);
+      
     }
 
     update() {
