@@ -5,6 +5,7 @@ class Preload extends Phaser.State {
         this.load.script('simpleLevel', 'js/map/simplelevel.js');
         this.load.script('controller', 'js/entity/controller.js');
         this.load.script('player', 'js/entity/player.js');
+        this.load.script('ally', 'js/entity/ally.js');
         this.load.script('enemy', 'js/entity/enemy.js');
         this.load.script('userInterface', 'js/entity/userInterface.js');
         this.load.script('barrierGenerator', 'js/entity/barrierGenerator.js');
@@ -12,6 +13,7 @@ class Preload extends Phaser.State {
         this.load.image('pointer', 'img/laserpointer.png');
         this.load.image('outOfBounds', 'img/outOfBounds.png');
         this.load.image('enemy', 'img/enemy.png');
+        this.load.image('tile', 'img/groundTile.png');
 
 
         //Background

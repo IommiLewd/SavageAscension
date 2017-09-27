@@ -1,4 +1,4 @@
-class Enemy extends Phaser.Sprite {
+class Ally extends Phaser.Sprite {
     constructor(game, x, y, key) {
         super(game, x, y, 'whiteSpace');
         this.game.add.existing(this);
@@ -50,50 +50,58 @@ class Enemy extends Phaser.Sprite {
 
 
     update() {
-     //   this.body.velocity.x = 20;
         //    this._gun.rotation = this.game.physics.arcade.angleToPointer(this);
    
-//var angle = Math.atan2(this.playerY - this.world.y, this.playerX - this.world.x );
-//angle = angle * (180/Math.PI);
-//this._gun.angle = angle;
-//
-//
-//        
+        
+        if(this.body.touching.down){
+    this.onBarrier = true;
+}
+        
+        
+        
+var angle = Math.atan2(this.playerY - this.world.y, this.playerX - this.world.x );
+angle = angle * (180/Math.PI);
+this._gun.angle = angle;
+
+if(this.body.blocked.down){
+    console.log('assbutticus');
+}
+        
         var distance = Phaser.Math.distance(this.playerX , this.playerY , this.world.x  , this.world.y);
         
         
-//        if (this.playerX < this.world.x) {
-//            if(distance > this.followDistance){
-//            this.body.velocity.x = -this.speed;
-//            } else {
-//                          this.body.velocity.x = 0; 
-//                      }
-//            this.torso.scale.setTo(-1.0, 1.0);
-//            this._gun.scale.setTo(1.0, -1.0);
-//            if (this._gun.angle < -160) {
-//                this.torso.animations.play('normal');
-//            } else if (this._gun.angle > -15) {
-//                this.torso.animations.play('upward');
-//            } else {
-//                this.torso.animations.play('downward');
-//            }
-//        } else {
-//             if(distance > this.followDistance){
-//            this.body.velocity.x = this.speed;
-//                      } else {
-//                          this.body.velocity.x = 0; 
-//                      }
-//            this.legs.scale.setTo(1.0, 1.0);
-//            this.torso.scale.setTo(1.0, 1.0);
-//            this._gun.scale.setTo(1.0, 1.0);
-//            if (this._gun.angle > -20 && this._gun.angle < 20) {
-//                this.torso.animations.play('normal');
-//            } else if (this._gun.angle > -20) {
-//                this.torso.animations.play('upward');
-//            } else {
-//                this.torso.animations.play('downward');
-//            }
-//        }
+        if (this.playerX < this.world.x) {
+            if(distance > this.followDistance){
+            this.body.velocity.x = -this.speed;
+            } else {
+                          this.body.velocity.x = 0; 
+                      }
+            this.torso.scale.setTo(-1.0, 1.0);
+            this._gun.scale.setTo(1.0, -1.0);
+            if (this._gun.angle < -160) {
+                this.torso.animations.play('normal');
+            } else if (this._gun.angle > -15) {
+                this.torso.animations.play('upward');
+            } else {
+                this.torso.animations.play('downward');
+            }
+        } else {
+             if(distance > this.followDistance){
+            this.body.velocity.x = this.speed;
+                      } else {
+                          this.body.velocity.x = 0; 
+                      }
+            this.legs.scale.setTo(1.0, 1.0);
+            this.torso.scale.setTo(1.0, 1.0);
+            this._gun.scale.setTo(1.0, 1.0);
+            if (this._gun.angle > -20 && this._gun.angle < 20) {
+                this.torso.animations.play('normal');
+            } else if (this._gun.angle > -20) {
+                this.torso.animations.play('upward');
+            } else {
+                this.torso.animations.play('downward');
+            }
+        }
 
 
 

@@ -1,4 +1,4 @@
-class Enemy extends Phaser.Sprite {
+class Ally extends Phaser.Sprite {
     constructor(game, x, y, key) {
         super(game, x, y, 'whiteSpace');
         this.game.add.existing(this);
@@ -16,10 +16,14 @@ class Enemy extends Phaser.Sprite {
         this._initLaser();
         this._addAnimations();
         this.onBarrier = false;
-        this.playerX = 300;
-        this.playerY = 300;
-        this.followDistance = Math.floor(Math.random()*(220-80+1)+80);
-        this.speed = Math.floor(Math.random()*(110-70+1)+70);
+        this.targetX = 1300;
+        this.targetY = 300;
+//        this.followDistance = Math.floor(Math.random() * (220 - 80 + 1) + 80);
+        this.speed = Math.floor(Math.random() * (110 - 70 + 1) + 70);
+        this.leftEvent = Math.floor(Math.random() * (90 - 30 + 1) + 30);
+        this.rightEvent = Math.floor(Math.random() * (700 - 480 + 1) + 480);
+        
+        this.movingForward = false;
 
     }
 
@@ -51,22 +55,47 @@ class Enemy extends Phaser.Sprite {
 
     update() {
         //    this._gun.rotation = this.game.physics.arcade.angleToPointer(this);
-   
-var angle = Math.atan2(this.playerY - this.world.y, this.playerX - this.world.x );
-angle = angle * (180/Math.PI);
-this._gun.angle = angle;
 
 
-        
-        var distance = Phaser.Math.distance(this.playerX , this.playerY , this.world.x  , this.world.y);
-        
-        
-        if (this.playerX < this.world.x) {
-            if(distance > this.followDistance){
-            this.body.velocity.x = -this.speed;
-            } else {
-                          this.body.velocity.x = 0; 
-                      }
+        if (this.body.touching.down) {
+            this.onBarrier = true;
+        }
+
+
+
+        var angle = Math.atan2(this.targetY - this.world.y, this.targetX - this.world.x);
+        angle = angle * (180 / Math.PI);
+        this._gun.angle = angle;
+//
+
+        var distance = Phaser.Math.distance(this.targetX, this.targetY, this.world.x, this.world.y);
+
+
+
+
+        if (this.movingForward === false && this.x < this.leftEvent) {
+            this.body.velocity.x = this.speed;
+            this.movingForward = true;
+        }
+
+
+        if(this.movingForward && this.x > this.rightEvent){
+            this.body.velocity.x = 0;
+            this.movingForward = false;
+        }
+
+
+
+
+
+
+
+        if (this.targetX < this.world.x) {
+            //            if(distance > this.followDistance){
+            //            this.body.velocity.x = -this.speed;
+            //            } else {
+            //                          this.body.velocity.x = 0; 
+            //                      }
             this.torso.scale.setTo(-1.0, 1.0);
             this._gun.scale.setTo(1.0, -1.0);
             if (this._gun.angle < -160) {
@@ -77,11 +106,11 @@ this._gun.angle = angle;
                 this.torso.animations.play('downward');
             }
         } else {
-             if(distance > this.followDistance){
-            this.body.velocity.x = this.speed;
-                      } else {
-                          this.body.velocity.x = 0; 
-                      }
+            //             if(distance > this.followDistance){
+            //            this.body.velocity.x = this.speed;
+            //                      } else {
+            //                          this.body.velocity.x = 0; 
+            //                      }
             this.legs.scale.setTo(1.0, 1.0);
             this.torso.scale.setTo(1.0, 1.0);
             this._gun.scale.setTo(1.0, 1.0);

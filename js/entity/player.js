@@ -60,7 +60,10 @@ class Player extends Phaser.Sprite {
         this._gun.rotation = this.game.physics.arcade.angleToPointer(this);
 
 
-
+if(this.body.touching.down){
+    this.onBarrier = true;
+}
+        console.log(this.onBarrier);
         if (this.game.input.worldX < this.x) {
             this.torso.scale.setTo(-1.0, 1.0);
             this._gun.scale.setTo(1.0, -1.0);

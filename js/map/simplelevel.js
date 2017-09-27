@@ -16,23 +16,36 @@ class SimpleLevel extends Phaser.State {
         this._loadCameraTarget();
         this.UpperBound = this.game.add.tileSprite(0, 0, this.game.world.width, 32, 'outOfBounds');
         this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
-        
+
     }
 
 
     _addPlayer() {
         this.player = new Player(this.game, 200, 100, 'player');
+        this.allies.add(this.player);
+    }
+
+
+    _addAlly(amount) {
+        if (amount === undefined) {
+            amount = 2;
+
+        }
+        for (var i = 0; i < amount; i++) {
+            this.ally = new Ally(this.game, 100, 100, 'enemy');
+            this.allies.add(this.ally);
+        }
     }
 
 
     _addEnemy(amount) {
-        if(amount === undefined){
+        if (amount === undefined) {
             amount = 2;
-            
+
         }
-        for(var i = 0; i < amount; i++){
-        this.enemy = new Enemy(this.game, 100, 100, 'enemy');
-        this.enemies.add(this.enemy);
+        for (var i = 0; i < amount; i++) {
+            this.enemy = new Enemy(this.game, 1650, 100, 'enemy');
+            this.enemies.add(this.enemy);
         }
     }
 
@@ -121,22 +134,17 @@ class SimpleLevel extends Phaser.State {
 
     _checkCollision() {
 
-//        this.physics.arcade.overlap(this.bullets, this.barrier.barrierGroup, this._kill_bullet, function (bullet, barrierGroup) {
-//            return barrierGroup.collides;
-//        }, this);
-//        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.player, this.processHandler, this.playerOnBarrier);
-//        this.game.physics.arcade.collide(this.barrier.barrierGroup, this.enemy, this.processHandler, this.playerOnBarrier);
-//        this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
+        //        this.physics.arcade.overlap(this.bullets, this.barrier.barrierGroup, this._kill_bullet, function (bullet, barrierGroup) {
+        //            return barrierGroup.collides;
+        //        }, this);
+        this.game.physics.arcade.collide(this.barrier.tileGroup, this.allies, this.processHandler, this.playerOnBarrier);
+           this.game.physics.arcade.collide(this.barrier.tileGroup, this.enemy, this.processHandler, this.playerOnBarrier);
+        //        this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
     }
 
-    playerOnBarrier(player, barrier) {
+    playerOnBarrier(ally, barrier) {
 
-
-        if (player.y < barrier.y + 5) {
-            player.onBarrier = true;
-        } else {
-            player.onBarrier = false;
-        }
+      ally.onBarrier = true;
     }
 
     processhandler(player, barrier) {
@@ -187,16 +195,19 @@ class SimpleLevel extends Phaser.State {
         this.selectedGun = 0;
 
         this._loadLevel();
-       // this._barrierGenerator();
+        this.enemies = this.game.add.group();
+        this.allies = this.game.add.group();
+        this._barrierGenerator();
         //  this._addController();
         this._addPlayer();
         this._initBullets();
         this._addExplosion();
         //        this._initUserInterface();
         //        this._addEnemyGroup();
-        this.enemies = this.game.add.group();
-        this._addEnemy(1);
-      
+
+        this._addAlly(5);
+       this._addEnemy(1);
+
     }
 
     update() {
@@ -212,9 +223,13 @@ class SimpleLevel extends Phaser.State {
         } else {
             this.player._gun.animations.play('notFiring');
         }
-        this.enemies.forEachAlive(function (enemy) {
-            enemy.playerX = this.player.world.x;
-            enemy.playerY = this.player.world.y;
+        this.allies.forEachAlive(function (ally) {
+            ally.playerX = this.player.world.x;
+            ally.playerY = this.player.world.y;
+//            if(ally.body.touching.down){
+//               ally.onBarrier = true;
+//                console.log('diiicks');
+//            }
         }, this)
 
 
