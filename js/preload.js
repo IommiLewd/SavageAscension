@@ -14,11 +14,13 @@ class Preload extends Phaser.State {
         this.load.image('outOfBounds', 'img/outOfBounds.png');
         this.load.image('enemy', 'img/enemy.png');
         this.load.image('tile', 'img/groundTile.png');
+        this.load.image('playerMarker', 'img/playerMarker.png');
 
-
+    
         //Background
 
         this.load.image('gradient', 'img/finGradient.png');
+        this.load.image('background', 'img/scrollingBackground.png');
 
         //New Player graphics
         this.load.image('whiteSpace', 'img/emptySprite.png');

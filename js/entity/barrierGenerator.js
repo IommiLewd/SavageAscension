@@ -14,7 +14,7 @@ class barrierGenerator extends Phaser.Sprite {
 
 
     _generateFloor() {
-        var fillWidth = this.game.world.width / 64 + 2;
+        var fillWidth = this.game.world.width / 64 + 6;
         var initial = 0;
         for (var i = 0; i < fillWidth; i++) {
             this.floorTile;

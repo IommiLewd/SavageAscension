@@ -18,6 +18,7 @@ class Player extends Phaser.Sprite {
         this._initLaser();
         this._addAnimations();
         this.onBarrier = false;
+        this._addMarker();
     }
 
 
@@ -43,7 +44,11 @@ class Player extends Phaser.Sprite {
         this.legs.animations.add('fly', [3], 6, true);
     }
 
-
+    _addMarker(){
+      this.marker =  this.game.add.sprite(0, -this.height/2 - 10, 'playerMarker');
+        this.marker.anchor.setTo(0.5);
+        this.addChild(this.marker);
+    }
 
     _initLaser() {
         this._gun = this.game.add.sprite(-4, -8, 'gun');
@@ -63,7 +68,7 @@ class Player extends Phaser.Sprite {
 if(this.body.touching.down){
     this.onBarrier = true;
 }
-        console.log(this.onBarrier);
+   
         if (this.game.input.worldX < this.x) {
             this.torso.scale.setTo(-1.0, 1.0);
             this._gun.scale.setTo(1.0, -1.0);
