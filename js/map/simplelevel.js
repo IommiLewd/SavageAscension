@@ -11,18 +11,7 @@ class SimpleLevel extends Phaser.State {
         this.game.stage.backgroundColor = "#1b2823";
         this.gradient = this.game.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, 'gradient');
         this.background = this.game.add.tileSprite(0, this.game.world.height - 212, this.game.world.width, 212, 'background');
-        
-        
-        
-        
-        
-        
-        
-        
         this._loadCameraTarget();
-        //this.UpperBound = this.game.add.tileSprite(0, 0, this.game.world.width, 32, 'outOfBounds');
-        //this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
-
     }
 
 
@@ -139,18 +128,20 @@ class SimpleLevel extends Phaser.State {
     }
 
     _checkCollision() {
-
+       this.game.physics.arcade.overlap(this.allies, this.enemies, this.impactHandler, null, this);
         //        this.physics.arcade.overlap(this.bullets, this.barrier.barrierGroup, this._kill_bullet, function (bullet, barrierGroup) {
         //            return barrierGroup.collides;
         //        }, this);
         this.game.physics.arcade.collide(this.barrier.tileGroup, this.allies, this.processHandler, this.playerOnBarrier);
-           this.game.physics.arcade.collide(this.barrier.tileGroup, this.enemies, this.processHandler, this.playerOnBarrier);
+        this.game.physics.arcade.collide(this.barrier.tileGroup, this.enemies, this.processHandler, this.playerOnBarrier);
+       
+
         //        this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
     }
 
     playerOnBarrier(ally, barrier) {
 
-      ally.onBarrier = true;
+        ally.onBarrier = true;
     }
 
     processhandler(player, barrier) {
@@ -158,6 +149,12 @@ class SimpleLevel extends Phaser.State {
     }
 
 
+    impactHandler (bullet, enemy) {
+console.log('sclepp');
+//  bullets.kill();
+    //veg.kill();
+
+}
 
     _addExplosion() {
         this.explosion = this.game.add.emitter(0, 0, 100);
@@ -208,15 +205,15 @@ class SimpleLevel extends Phaser.State {
         this._addPlayer();
         this._initBullets();
         this._addExplosion();
-        
+
         //        this._initUserInterface();
         //        this._addEnemyGroup();
 
         this._addAlly(2);
-       this._addEnemy(5);
-    
-     //   var myLoop = game.time.events.loop(Phaser.Timer.SECOND * 1 , this._addEnemy(1), this);
-;
+        this._addEnemy(5);
+
+        //   var myLoop = game.time.events.loop(Phaser.Timer.SECOND * 1 , this._addEnemy(1), this);
+        ;
     }
 
     update() {
@@ -232,86 +229,86 @@ class SimpleLevel extends Phaser.State {
         } else {
             this.player._gun.animations.play('notFiring');
         }
-        
-//        this.allies.forEachAlive(function (ally) {
-//            var targetX;
-//            var targetY;
-//            var currentX;
-//            this.lowestX = 1600;
-//            
-//            this.enemies.forEachAlive(function (enemy){
-//               //currentX = this.x;
-//                   currentX = enemy.x;
-//                //console.log('current x is: ' + currentX + 'lowestX ' + this.lowestX);
-//                
-//                if(currentX < this.lowestX){
-//                    this.lowestX = currentX;
-//                    targetX = enemy.x;
-//                    targetY = enemy.y;
-//                }
-//                           }, this)                 
-//                                      
-//                       ally.targetX = targetX;               
-//                       ally.targetY = targetY;   
-//            console.log(ally.targetY);
-//                                      
-//                                      
-//
-//        }, this)
 
-        
-        
+        //        this.allies.forEachAlive(function (ally) {
+        //            var targetX;
+        //            var targetY;
+        //            var currentX;
+        //            this.lowestX = 1600;
+        //            
+        //            this.enemies.forEachAlive(function (enemy){
+        //               //currentX = this.x;
+        //                   currentX = enemy.x;
+        //                //console.log('current x is: ' + currentX + 'lowestX ' + this.lowestX);
+        //                
+        //                if(currentX < this.lowestX){
+        //                    this.lowestX = currentX;
+        //                    targetX = enemy.x;
+        //                    targetY = enemy.y;
+        //                }
+        //                           }, this)                 
+        //                                      
+        //                       ally.targetX = targetX;               
+        //                       ally.targetY = targetY;   
+        //            console.log(ally.targetY);
+        //                                      
+        //                                      
+        //
+        //        }, this)
+
+
+
         this.allies.forEachAlive(function (ally) {
-            
-    var targetX;
-    var targetY;
-            
-    var lowest_distance = 1600;
+
+            var targetX;
+            var targetY;
+
+            var lowest_distance = 1600;
 
 
-    this.enemies.forEachAlive(function (enemy){
+            this.enemies.forEachAlive(function (enemy) {
 
-        var distance = Phaser.Math.distance(ally.x , ally.y , enemy.x  , enemy.y);
-      //  var distance = (enemy.x - ally.x)(enemy.x - ally.x) + (enemy.y - ally.y)(enemy.y - ally.y);
+                var distance = Phaser.Math.distance(ally.x, ally.y, enemy.x, enemy.y);
+                //  var distance = (enemy.x - ally.x)(enemy.x - ally.x) + (enemy.y - ally.y)(enemy.y - ally.y);
 
-        if(distance < lowest_distance){
-            lowest_distance = distance;
+                if (distance < lowest_distance) {
+                    lowest_distance = distance;
 
-            targetX = enemy.x;
-            targetY = enemy.y;
-        }
-    }, this)
-if(lowest_distance < 800){
-    ally.distance = lowest_distance;
-    ally.targetX = targetX;
-    ally.targetY = targetY;
-} else {
-    ally.distance = 1600;
-        ally.targetX = 1600;
-    ally.targetY = 720;
-}
-//     if(lowest_distance < 400){
-        // ally._fireMachinegun();
-//     } 
-}, this)
-        
-        
-        
-//                this.allies.forEachAlive(function (ally) {
-//            ally.targetX = this.player.world.x;
-//            ally.targetY = this.player.world.y;
-//        }, this)
+                    targetX = enemy.x;
+                    targetY = enemy.y;
+                }
+            }, this)
+            if (lowest_distance < 800) {
+                ally.distance = lowest_distance;
+                ally.targetX = targetX;
+                ally.targetY = targetY;
+            } else {
+                ally.distance = 1600;
+                ally.targetX = 1600;
+                ally.targetY = 720;
+            }
+            //     if(lowest_distance < 400){
+            // ally._fireMachinegun();
+            //     } 
+        }, this)
+
+
+
+        //                this.allies.forEachAlive(function (ally) {
+        //            ally.targetX = this.player.world.x;
+        //            ally.targetY = this.player.world.y;
+        //        }, this)
 
         //            if(ally.body.touching.down){
-//               ally.onBarrier = true;
-//                console.log('diiicks');
-//            }
-        
-        
-        
-        
-        
-    // this.background.x = this.player.x * 0.1;
+        //               ally.onBarrier = true;
+        //                console.log('diiicks');
+        //            }
+
+
+
+
+
+        // this.background.x = this.player.x * 0.1;
         //        //        this.background1.y = this.player.y * 0.12;
         //        //        this.background2.x = this.player.x * 0.11;
         //        //        this.background2.y = this.player.y * 0.11;

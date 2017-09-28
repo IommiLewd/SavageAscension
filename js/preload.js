@@ -11,7 +11,7 @@ class Preload extends Phaser.State {
         this.load.script('barrierGenerator', 'js/entity/barrierGenerator.js');
 
         this.load.image('pointer', 'img/laserpointer.png');
-        this.load.image('outOfBounds', 'img/outOfBounds.png');
+
         this.load.image('enemy', 'img/enemy.png');
         this.load.image('tile', 'img/groundTile.png');
         this.load.image('playerMarker', 'img/playerMarker.png');
@@ -28,10 +28,10 @@ class Preload extends Phaser.State {
         this.load.spritesheet('gun', 'img/gunAnimation.png', 48, 12, 3);
         this.load.spritesheet('torsos', 'img/torsos.png', 42, 38, 8);
         this.load.spritesheet('legs', 'img/legs.png', 88, 30, 8);
-        //Barriers
-        this.load.image('barrier', 'img/barrier.png');
-        this.load.image('barrier2', 'img/barrier2.png');
-        this.load.image('floor', 'img/floorBarrier.png');
+        
+        
+        //enemies
+        this.load.spritesheet('charger', 'img/Dynastinae.png', 180, 100, 5);
 
         //Gun related
         this.load.image('crossHair', 'img/crossHair.png');
