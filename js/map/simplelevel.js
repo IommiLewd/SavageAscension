@@ -20,8 +20,8 @@ class SimpleLevel extends Phaser.State {
         
         
         this._loadCameraTarget();
-        this.UpperBound = this.game.add.tileSprite(0, 0, this.game.world.width, 32, 'outOfBounds');
-        this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
+        //this.UpperBound = this.game.add.tileSprite(0, 0, this.game.world.width, 32, 'outOfBounds');
+        //this.lowerBound = this.game.add.tileSprite(0, 868, this.game.world.width, 32, 'outOfBounds');
 
     }
 
@@ -212,7 +212,7 @@ class SimpleLevel extends Phaser.State {
         //        this._initUserInterface();
         //        this._addEnemyGroup();
 
-        this._addAlly(10);
+        this._addAlly(2);
        this._addEnemy(5);
     
      //   var myLoop = game.time.events.loop(Phaser.Timer.SECOND * 1 , this._addEnemy(1), this);
