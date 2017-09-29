@@ -31,7 +31,7 @@ class Preload extends Phaser.State {
         
         
         //enemies
-        this.load.spritesheet('charger', 'img/Dynastinae.png', 180, 100, 5);
+        this.load.spritesheet('charger', 'img/Dynastinae.png', 180, 100, 15);
 
         //Gun related
         this.load.image('crossHair', 'img/crossHair.png');

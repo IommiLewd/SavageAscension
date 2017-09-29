@@ -13,12 +13,14 @@ class Enemy extends Phaser.Sprite {
         this._addAnimations();
         this.speed = Math.floor(Math.random() * (40 - 10 + 1) + 10);
         this.health = 260;
+        this.attackingNow = false;
     }
 
 
 
     _addAnimations() {
         this.animations.add('forward', [1, 2, 3, 4], 6, true);
+        this.animations.add('attacking', [5, 6, 7, 8], 6, true);
         //        this.torso.animations.add('normal', [0], 10, true);
         //        this.torso.animations.add('upward', [1], 10, true);
         //        this.torso.animations.add('downward', [2], 10, true);
@@ -30,9 +32,23 @@ class Enemy extends Phaser.Sprite {
         this.animations.play('forward');
     }
 
+    _attacking() {
+        if (this.attackingNow === false) {
+            this.attackingNow = true;
 
+            var animReference;
 
+            animReference = this.animations.play('attacking');
+            animReference = this.animations.currentAnim.onComplete.add(function () {
+                console.log('animation complete');
+            }, this);
 
+        }
+    }
+
+    _damageTaken() {
+        this.health -= 3;
+    }
     update() {
         this.body.velocity.x = -this.speed;
 

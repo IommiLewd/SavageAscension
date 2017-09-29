@@ -41,6 +41,7 @@ class SimpleLevel extends Phaser.State {
         for (var i = 0; i < amount; i++) {
             this.enemy = new Enemy(this.game, 1800, 100, 'enemy');
             this.enemies.add(this.enemy);
+            this.enemiesSpawned++;
         }
     }
 
@@ -128,17 +129,23 @@ class SimpleLevel extends Phaser.State {
     }
 
     _checkCollision() {
-       this.game.physics.arcade.overlap(this.allies, this.enemies, this.impactHandler, null, this);
+        //       this.game.physics.arcade.overlap(this.ally.bullets, this.enemies, this.impactHandler, null, this);
         //        this.physics.arcade.overlap(this.bullets, this.barrier.barrierGroup, this._kill_bullet, function (bullet, barrierGroup) {
         //            return barrierGroup.collides;
         //        }, this);
         this.game.physics.arcade.collide(this.barrier.tileGroup, this.allies, this.processHandler, this.playerOnBarrier);
         this.game.physics.arcade.collide(this.barrier.tileGroup, this.enemies, this.processHandler, this.playerOnBarrier);
-       
 
-        //        this.game.physics.arcade.overlap(this.player, this.barrier.barrierGroup, this.onCollision, this.playerOnBarrier);
+
+           this.game.physics.arcade.overlap(this.allies, this.enemies, this.allyHit);
     }
 
+    
+    allyHit(ally, enemy){
+        ally.kill();
+        enemy._attacking();
+        console.log('woof woof');
+    }
     playerOnBarrier(ally, barrier) {
 
         ally.onBarrier = true;
@@ -149,13 +156,33 @@ class SimpleLevel extends Phaser.State {
     }
 
 
-    impactHandler (bullet, enemy) {
-console.log('sclepp');
-//  bullets.kill();
-    //veg.kill();
+    impactHandler(bullet, enemy) {
+        bullet.kill();
+        enemy._damageTaken();
+        if(enemy.health < 0){
+            this.enemiesSpawned--;
+            console.log('dead! enemies currently alive: ' + this.enemiesSpawned);
+            if(this.enemiesSpawned <= 0){
+                 this._waveGenerator();
+            }
+        }
 
+    }
+_waveGenerator(){
+    
+    
+    //waveGenerator is gonna look like dis
+    /*
+    this.amountOfSpawns = 2;
+    this.levelOfSpawns = 1;
+    this._addEnemy(this.amountOfSpawns, this.levelOfSpawns);
+    
+    
+    */
+    console.log('waveGenerator fired');
+    this._addEnemy(5);
+    
 }
-
     _addExplosion() {
         this.explosion = this.game.add.emitter(0, 0, 100);
         this.explosion.width = 0;
@@ -196,7 +223,7 @@ console.log('sclepp');
     create() {
         this.jumpTimer = 0;
         this.selectedGun = 0;
-
+this.enemiesSpawned = 0;
         this._loadLevel();
         this.enemies = this.game.add.group();
         this.allies = this.game.add.group();
@@ -210,21 +237,16 @@ console.log('sclepp');
         //        this._addEnemyGroup();
 
         this._addAlly(2);
-        this._addEnemy(5);
+        this._addEnemy(8);
 
-        //   var myLoop = game.time.events.loop(Phaser.Timer.SECOND * 1 , this._addEnemy(1), this);
-        ;
+        
     }
 
     update() {
-
-        //        //        if(this.enemy.y < 10){
-        //        //            this.enemy.kill();
-        //        //        }
         if (this.game.input.activePointer.leftButton.isDown) {
             this._fireMachinegun();
             this.player._gun.animations.play('fire');
-            // this._fireBeamWeapon();
+  
 
         } else {
             this.player._gun.animations.play('notFiring');
@@ -259,21 +281,16 @@ console.log('sclepp');
 
 
         this.allies.forEachAlive(function (ally) {
-
+            this.game.physics.arcade.overlap(ally.bullets, this.enemies, this.impactHandler, null, this);
             var targetX;
             var targetY;
 
             var lowest_distance = 1600;
-
-
             this.enemies.forEachAlive(function (enemy) {
 
                 var distance = Phaser.Math.distance(ally.x, ally.y, enemy.x, enemy.y);
-                //  var distance = (enemy.x - ally.x)(enemy.x - ally.x) + (enemy.y - ally.y)(enemy.y - ally.y);
-
                 if (distance < lowest_distance) {
                     lowest_distance = distance;
-
                     targetX = enemy.x;
                     targetY = enemy.y;
                 }
@@ -287,23 +304,8 @@ console.log('sclepp');
                 ally.targetX = 1600;
                 ally.targetY = 720;
             }
-            //     if(lowest_distance < 400){
-            // ally._fireMachinegun();
-            //     } 
+
         }, this)
-
-
-
-        //                this.allies.forEachAlive(function (ally) {
-        //            ally.targetX = this.player.world.x;
-        //            ally.targetY = this.player.world.y;
-        //        }, this)
-
-        //            if(ally.body.touching.down){
-        //               ally.onBarrier = true;
-        //                console.log('diiicks');
-        //            }
-
 
 
 

@@ -53,9 +53,9 @@ class Ally extends Phaser.Sprite {
     }
     _fireMachinegun() {
         /*this.player._fireWeapon();*/
-        this.fireRate = 90;
+        this.fireRate = 190;
         this.bullet;
-        this.bullets.setAll('frame', 0);
+        this.bullets.setAll('frame', 2);
         this.randomNumber = (Math.random() - 0.5) * 2;
         if (this.game.time.now > this._nextFire && this.bullets.countDead() > 4) {
             this._nextFire = this.game.time.now + this.fireRate;
