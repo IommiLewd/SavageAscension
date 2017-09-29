@@ -7,11 +7,17 @@ class Enemy extends Phaser.Sprite {
         this.game.physics.arcade.enableBody(this);
         //this.body.collideWorldBounds = true;
         this.body.gravity.y = 300;
-
+        
+        
+                this.size = Math.floor(Math.random() * (12 - 6 + 1) + 6);
+        this.size = this.size / 10;
+        console.log('current size is: ' + this.size);
+        this.scale.setTo(this.size, this.size);
         this.targetX = 300;
         this.targetY = 300;
         this._addAnimations();
         this.speed = Math.floor(Math.random() * (40 - 10 + 1) + 10);
+        
         this.health = 260;
         this.attackingNow = false;
     }
@@ -48,6 +54,7 @@ class Enemy extends Phaser.Sprite {
 
     _damageTaken() {
         this.health -= 3;
+        this.tint = Math.random() * 0xffffff;
     }
     update() {
         this.body.velocity.x = -this.speed;

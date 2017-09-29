@@ -142,6 +142,7 @@ class SimpleLevel extends Phaser.State {
 
     
     allyHit(ally, enemy){
+        ally.x = -2000;
         ally.kill();
         enemy._attacking();
         console.log('woof woof');
@@ -236,8 +237,8 @@ this.enemiesSpawned = 0;
         //        this._initUserInterface();
         //        this._addEnemyGroup();
 
-        this._addAlly(2);
-        this._addEnemy(8);
+        this._addAlly(4);
+        this._addEnemy(4);
 
         
     }
