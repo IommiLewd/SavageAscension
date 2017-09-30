@@ -45,43 +45,12 @@ class SimpleLevel extends Phaser.State {
         }
     }
 
-    _initBullets() {
-        this.bullets = this.game.add.group();
-        this.bullets.enableBody = true;
-        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
-        this.bullets.createMultiple(500, 'bullet');
-        this.bullets.setAll('checkWorldBounds', true);
-        this.bullets.setAll('outOfBoundsKill', true);
-        this.bullets.setAll('anchor.x', 0.0);
-        this.bullets.setAll('anchor.y', 0.5);
 
-        //  --- Disable Gravity for Each Bullet
-        this.bullets.forEach(function (L) {
-            L.body.allowGravity = false;
-        });
-        this._nextFire = 200;
-
-
-    }
     _mouseWheel() {
         console.log('mousewheel fired, selectedGun is: ' + this.selectedGun);
     }
 
-    _fireMachinegun() {
-        /*this.player._fireWeapon();*/
-        this.fireRate = 90;
-        this.bullet;
-        this.bullets.setAll('frame', 0);
-        this.randomNumber = (Math.random() - 0.5) * 2;
-        if (this.game.time.now > this._nextFire && this.bullets.countDead() > 4) {
-            this._nextFire = this.game.time.now + this.fireRate;
-            this.bullet = this.bullets.getFirstDead();
-            this.bullet.reset(this.player.x, this.player.y - 10);
-            this.game.physics.arcade.velocityFromAngle(this.player._gun.angle + (this.randomNumber * 5), 1600, this.bullet.body.velocity);
-            this.bullet.angle = this.player._gun.angle;
-            this.bullets.add(this.bullet);
-        }
-    }
+
 
     _fireBeamWeapon() {
         this.fireRate = 0;
@@ -137,11 +106,11 @@ class SimpleLevel extends Phaser.State {
         this.game.physics.arcade.collide(this.barrier.tileGroup, this.enemies, this.processHandler, this.playerOnBarrier);
 
 
-           this.game.physics.arcade.overlap(this.allies, this.enemies, this.allyHit);
+        this.game.physics.arcade.overlap(this.allies, this.enemies, this.allyHit);
     }
 
-    
-    allyHit(ally, enemy){
+
+    allyHit(ally, enemy) {
         ally.x = -2000;
         ally.kill();
         enemy._attacking();
@@ -160,30 +129,31 @@ class SimpleLevel extends Phaser.State {
     impactHandler(bullet, enemy) {
         bullet.kill();
         enemy._damageTaken();
-        if(enemy.health < 0){
+        if (enemy.health < 0) {
             this.enemiesSpawned--;
             console.log('dead! enemies currently alive: ' + this.enemiesSpawned);
-            if(this.enemiesSpawned <= 0){
-                 this._waveGenerator();
+            if (this.enemiesSpawned <= 0) {
+                this._waveGenerator();
             }
         }
 
     }
-_waveGenerator(){
+    _waveGenerator() {
+
+
+        //waveGenerator is gonna look like dis
+        /*
+        this.currentWave++;
+        this.amountOfSpawns = 2;
+        this.levelOfSpawns = 1;
+        this._addEnemy(this.amountOfSpawns, this.levelOfSpawns);
+        
     
-    
-    //waveGenerator is gonna look like dis
-    /*
-    this.amountOfSpawns = 2;
-    this.levelOfSpawns = 1;
-    this._addEnemy(this.amountOfSpawns, this.levelOfSpawns);
-    
-    
-    */
-    console.log('waveGenerator fired');
-    this._addEnemy(5);
-    
-}
+        */
+        console.log('waveGenerator fired');
+        this._addEnemy(5);
+
+    }
     _addExplosion() {
         this.explosion = this.game.add.emitter(0, 0, 100);
         this.explosion.width = 0;
@@ -224,35 +194,34 @@ _waveGenerator(){
     create() {
         this.jumpTimer = 0;
         this.selectedGun = 0;
-this.enemiesSpawned = 0;
+        this.enemiesSpawned = 0;
         this._loadLevel();
         this.enemies = this.game.add.group();
         this.allies = this.game.add.group();
         this._barrierGenerator();
         //  this._addController();
         this._addPlayer();
-        this._initBullets();
-        this._addExplosion();
+
+        //        this._addExplosion();
 
         //        this._initUserInterface();
-        //        this._addEnemyGroup();
 
-        this._addAlly(4);
+        this._addAlly(8);
         this._addEnemy(4);
 
-        
+
     }
 
     update() {
         if (this.game.input.activePointer.leftButton.isDown) {
-            this._fireMachinegun();
+            this.player._fireMachinegun();
             this.player._gun.animations.play('fire');
-  
+
 
         } else {
             this.player._gun.animations.play('notFiring');
         }
-
+this.background.tilePosition.x -= 0.2;
         //        this.allies.forEachAlive(function (ally) {
         //            var targetX;
         //            var targetY;

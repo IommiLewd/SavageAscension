@@ -11,9 +11,10 @@ class Preload extends Phaser.State {
         this.load.script('barrierGenerator', 'js/entity/barrierGenerator.js');
 
         this.load.image('pointer', 'img/laserpointer.png');
+        this.load.image('pointer2', 'img/laserpointer2.png');
 
         this.load.image('enemy', 'img/enemy.png');
-        this.load.image('tile', 'img/groundTile.png');
+        this.load.image('tile', 'img/groundTile3.png');
         this.load.image('playerMarker', 'img/playerMarker.png');
 
     

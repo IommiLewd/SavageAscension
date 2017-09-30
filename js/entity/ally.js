@@ -86,7 +86,7 @@ class Ally extends Phaser.Sprite {
         this.addChild(this._gun);
         this._gun.animations.add('fire', [0, 1, 2], 30, true);
         this._gun.animations.add('notFiring', [0], 30, false);
-        this._laser_pointer = this.game.add.tileSprite(0, 0, 768, 0.5, 'pointer');
+        this._laser_pointer = this.game.add.tileSprite(0, 0, 168, 0.5, 'pointer2');
         this._gun.addChild(this._laser_pointer);
     }
 

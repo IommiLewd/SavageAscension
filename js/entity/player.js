@@ -19,6 +19,7 @@ class Player extends Phaser.Sprite {
         this._addAnimations();
         this.onBarrier = false;
         this._addMarker();
+        this._initBullets();
     }
 
 
@@ -32,6 +33,58 @@ class Player extends Phaser.Sprite {
         //        this._WheelUp = this.game.input.mouse.WHEEL_UP;
 
     }
+    
+    
+        _initBullets() {
+        this.bullets = this.game.add.group();
+        this.bullets.enableBody = true;
+        this.bullets.physicsBodyType = Phaser.Physics.ARCADE;
+        this.bullets.createMultiple(500, 'bullet');
+        this.bullets.setAll('checkWorldBounds', true);
+        this.bullets.setAll('outOfBoundsKill', true);
+        this.bullets.setAll('anchor.x', 0.0);
+        this.bullets.setAll('anchor.y', 0.5);
+
+        //  --- Disable Gravity for Each Bullet
+        this.bullets.forEach(function (L) {
+          //  L.body.allowGravity = false;
+//            L.body.gravity.y = 400;
+//            L.rotation = 30;
+        });
+        this._nextFire = 200;
+
+
+    }
+    _fireMachinegun() {
+        /*this.player._fireWeapon();*/
+        this.fireRate = 120;
+        this.bullet;
+        this.bullets.setAll('frame', 0);
+        this.randomNumber = (Math.random() - 0.5) * 2;
+        if (this.game.time.now > this._nextFire && this.bullets.countDead() > 4) {
+            this._nextFire = this.game.time.now + this.fireRate;
+            this.bullet = this.bullets.getFirstDead();
+            this.bullet.reset(this.x, this.y - 10);
+            this.game.physics.arcade.velocityFromAngle(this._gun.angle + (this.randomNumber * 5), 1600, this.bullet.body.velocity);
+            this.bullet.angle = this._gun.angle;
+            this.bullets.add(this.bullet);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     _addAnimations() {
         this.torso.animations.add('normal', [0], 10, true);
